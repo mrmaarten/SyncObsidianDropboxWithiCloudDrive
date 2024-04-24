@@ -51,3 +51,20 @@ The scripts adds  what is deleted to a \_beenDeleted.md file so the user can che
 ### New Features
 1. only delete folders that are not empty
 2. parse Obsidian URLs as files/ folders, add .md if file does not have extension
+
+## Issues I couldn't resolve
+Trying to log unsuccessful deletions, but didn't get any log outs
+
+```
+# Attempt to delete from Dropbox folder
+    if [ -f "$dropboxFolder/$fileToDelete" ] || [ -d "$dropboxFolder/$fileToDelete" ]; then
+        rm "$icloudFolder/$fileToDelete"
+        if [ $? -eq 0 ]; then
+            echo "$fileToDelete" >> "$icloudFolder/$deletedFile"
+            echo "File successfully deleted."
+        else
+            echo "$fileToDelete" >> "$dropboxFolder/$deleteUnsuccess"
+            echo "File deletion failed."
+        fi
+    fi
+```

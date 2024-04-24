@@ -10,8 +10,7 @@ deleteUnsuccess="_deleteUnsuccessfull.md"
 # Ensure _delete.md and _beenDeleted.md exist in both directories
 touch "$icloudFolder/$deleteFile" "$dropboxFolder/$deleteFile"
 touch "$icloudFolder/$deletedFile" "$dropboxFolder/$deletedFile"
-#make a temp file for unsuccessfull deletion
-touch "$icloudFolder/$deleteUnsuccess" "$dropboxFolder/$deleteUnsuccess"
+
 
 # Concatenate _delete.md files from both folders into one in the Dropbox folder
 cat "$icloudFolder/$deleteFile" "$dropboxFolder/$deleteFile" | sort | uniq > "$dropboxFolder/${deleteFile}_combined"
@@ -24,27 +23,13 @@ delete_files() {
     # checks if it is a file or directory
    if [ -f "$icloudFolder/$fileToDelete" ] || [ -d "$icloudFolder/$fileToDelete" ]; then
         rm -r "$icloudFolder/$fileToDelete"
-
-        #check for success or failure of deletion
-        if [ $? -eq 0 ]; then
-            echo "$fileToDelete" >> "$icloudFolder/$deletedFile"
-            echo "File successfully deleted."
-        else
-            echo "$fileToDelete" >> "$icloudFolder/$deleteUnsuccess"
-            echo "File deletion failed."
-        fi
+        echo "$fileToDelete" >> "$icloudFolder/$deletedFile"
     fi
 
     # Attempt to delete from Dropbox folder
     if [ -f "$dropboxFolder/$fileToDelete" ] || [ -d "$dropboxFolder/$fileToDelete" ]; then
         rm "$icloudFolder/$fileToDelete"
-        if [ $? -eq 0 ]; then
-            echo "$fileToDelete" >> "$icloudFolder/$deletedFile"
-            echo "File successfully deleted."
-        else
-            echo "$fileToDelete" >> "$dropboxFolder/$deleteUnsuccess"
-            echo "File deletion failed."
-        fi
+        echo "$fileToDelete" >> "$icloudFolder/$deletedFile"   
     fi
 }
 
@@ -54,12 +39,8 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 done < "$dropboxFolder/$deleteFile"
 
 # Empty the _delete.md file after processing
-# > "$icloudFolder/$deleteFile"
-# > "$dropboxFolder/$deleteFile"
-
-#rename the deleteUnsuccess file to deleteFile
-mv "$dropboxFolder/$deleteUnsuccess" "$dropboxFolder/$deleteFile"
-mv "$icloudFolder/$deleteUnsuccess" "$icloudFolder/$deleteFile"
+> "$icloudFolder/$deleteFile"
+> "$dropboxFolder/$deleteFile"
 
 # Continue with the rest of the sync, excluding the _delete.md, _beenDeleted.md files, and the .obsidian folder
 rsync -au --exclude "$deleteFile" --exclude "$deletedFile" --exclude '.DS_Store' --exclude '.obsidian/' "$icloudFolder/" "$dropboxFolder/"
