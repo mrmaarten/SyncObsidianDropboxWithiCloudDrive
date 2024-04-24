@@ -5,7 +5,6 @@ icloudFolder="$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/iPhone
 dropboxFolder="$HOME/Library/CloudStorage/Dropbox/BIG/Persoonlijk/ObsidianVaults"
 deleteFile="_delete.md"
 deletedFile="_beenDeleted.md"
-deleteUnsuccess="_deleteUnsuccessfull.md"
 
 # Ensure _delete.md and _beenDeleted.md exist in both directories
 touch "$icloudFolder/$deleteFile" "$dropboxFolder/$deleteFile"

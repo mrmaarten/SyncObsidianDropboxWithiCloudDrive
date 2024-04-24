@@ -44,13 +44,11 @@ will work.
 
 The scripts adds  what is deleted to a \_beenDeleted.md file so the user can check.
 
-### Bugs
-1. a clear line deleletes the whole Vault!
+### Known Bugs
 
 
 ### New Features
-1. only delete folders that are not empty
-2. parse Obsidian URLs as files/ folders, add .md if file does not have extension
+1. parse Obsidian URLs as files/ folders, add .md if file does not have extension
 
 ## Issues I couldn't resolve
 Trying to log unsuccessful deletions, but didn't get any log outs
@@ -68,3 +66,11 @@ Trying to log unsuccessful deletions, but didn't get any log outs
         fi
     fi
 ```
+
+
+Parsing Obsidian url did work reliable with
+
+```
+obsidian://open?vault=ObsidianVaults&file=Subsidie%2FRVO%20-%20WBSO%20-%20SIB%20-%20PPO%2FReadme
+```
+
