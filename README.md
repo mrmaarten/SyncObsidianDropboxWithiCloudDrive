@@ -33,3 +33,21 @@ Set up the CronTab with
 
 `crontab -e`
 
+## The Script
+This script runs as a `cron` job on MacMini, every minute. Because it cannot know which files we want to delete (it will sync it back), I added a \_delete.md file in which we can specify which files we want the script to delete. A file should have a file extension (eg .md) we can also specify files in folder.
+
+Examples
+Untitled.md
+Some Things/Untitled 2.md
+
+will work.
+
+The scripts adds  what is deleted to a \_beenDeleted.md file so the user can check.
+
+### Bugs
+1. a clear line deleletes the whole Vault!
+
+
+### New Features
+1. only delete folders that are not empty
+2. parse Obsidian URLs as files/ folders, add .md if file does not have extension
