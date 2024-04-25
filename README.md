@@ -3,6 +3,10 @@ This way I can sync between desktop computers that save to dropbox and iOS devic
 
 I have the Obsidian Vaults on Dropbox, on iOS this doesn't work, so on my Mac Mini iSync between Dropbox and iCloud every minute.
 
+This script uses this Obsidian plugin to earier manage with files and folder should be deleted by the sync script:
+https://github.com/mrmaarten/manageDropboxiCloudSyncObsidian
+
+## Installing the script on MacOs:
 I had to give Cron permissions 
 
 ### Grant Full Disk Access to `cron`
