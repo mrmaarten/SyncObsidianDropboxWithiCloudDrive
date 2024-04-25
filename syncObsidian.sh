@@ -15,24 +15,30 @@ touch "$icloudFolder/$deletedFile" "$dropboxFolder/$deletedFile"
 cat "$icloudFolder/$deleteFile" "$dropboxFolder/$deleteFile" | sort | uniq > "$dropboxFolder/${deleteFile}_combined"
 mv "$dropboxFolder/${deleteFile}_combined" "$dropboxFolder/$deleteFile"
 
-# Function to delete files from both folders
-delete_files() {
-    local fileToDelete=$1
-    # Attempt to delete from iCloud folder
-    # checks if it is a file or directory
-   if [ -f "$icloudFolder/$fileToDelete" ] || [ -d "$icloudFolder/$fileToDelete" ]; then
-        rm -r "$icloudFolder/$fileToDelete"
-        echo "$fileToDelete" >> "$icloudFolder/$deletedFile"
-    fi
+# Function to delete files or folders (by the arguments that are passed)
+delete_file_or_dir() {
+    local folder=$1
+    local fileToDelete=$2
+    local deletedFile=$3
 
-    # Attempt to delete from Dropbox folder
-    if [ -f "$dropboxFolder/$fileToDelete" ] || [ -d "$dropboxFolder/$fileToDelete" ]; then
-        rm "$icloudFolder/$fileToDelete"
-        echo "$fileToDelete" >> "$icloudFolder/$deletedFile"   
+    if [ -f "$folder/$fileToDelete" ]; then
+        rm "$folder/$fileToDelete"
+        echo "$fileToDelete" >> "$folder/$deletedFile"
+    elif [ -d "$folder/$fileToDelete" ]; then
+        if [ -z "$(ls -A "$folder/$fileToDelete")" ]; then
+            rmdir "$folder/$fileToDelete"
+            echo "$fileToDelete" >> "$folder/$deletedFile"
+        fi
     fi
 }
 
-# Use the combined _delete.md in the Dropbox folder as the source for deletions
+# Function to delete files from both folders
+delete_files() {
+    local fileToDelete=$1
+    delete_file_or_dir "$icloudFolder" "$fileToDelete" "$deletedFile"
+    delete_file_or_dir "$dropboxFolder" "$fileToDelete" "$deletedFile"
+}
+
 while IFS= read -r line || [[ -n "$line" ]]; do
     delete_files "$line"
 done < "$dropboxFolder/$deleteFile"
